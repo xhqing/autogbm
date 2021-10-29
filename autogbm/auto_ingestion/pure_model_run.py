@@ -5,9 +5,9 @@
 import os
 import time
 
-from autotab import AutoDLDataset
-from autotab.utils.util import get_solution
-from autotab.metrics import autodl_auc, accuracy
+from autogbm import AutoDLDataset
+from autogbm.utils.util import get_solution
+from autogbm.metrics import autodl_auc, accuracy
 
 
 def run_single_model(model, dataset_dir, basename, time_budget=1200, max_epoch=50):

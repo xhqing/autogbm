@@ -48,7 +48,7 @@ from shutil import copy2
 import csv
 import psutil
 import platform
-from autotab.utils.log_utils import logger
+from autogbm.utils.log_utils import logger
 
 
 # ================ Small auxiliary functions =================

@@ -1,1 +1,1 @@
-from autotab.metrics.scores import autodl_auc, accuracy
+from autogbm.metrics.scores import autodl_auc, accuracy

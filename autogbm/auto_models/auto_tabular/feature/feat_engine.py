@@ -1,6 +1,6 @@
 from .feat_gen import *
 from sklearn.utils import shuffle
-from autotab.utils.log_utils import timeit
+from autogbm.utils.log_utils import timeit
 
 
 class FeatEngine:

@@ -5,7 +5,7 @@ from .feat_namer import FeatNamer
 from sklearn.model_selection import StratifiedKFold
 from joblib import Parallel, delayed
 from ...auto_tabular import CONSTANT
-from autotab.utils.log_utils import timeit
+from autogbm.utils.log_utils import timeit
 
 
 class TargetEncoder:

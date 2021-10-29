@@ -1,7 +1,7 @@
 import numpy as np
 from functools import reduce
 from sklearn.metrics import roc_auc_score
-from autotab.utils.log_utils import logger
+from autogbm.utils.log_utils import logger
 
 
 def tiedrank(a):

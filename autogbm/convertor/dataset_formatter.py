@@ -9,7 +9,7 @@ import os
 import tensorflow as tf
 from google.protobuf import text_format
 
-from autotab.auto_ingestion.dataset import AutoDLDataset, AutoDLMetadata
+from autogbm.auto_ingestion.dataset import AutoDLDataset, AutoDLMetadata
 
 
 logger = logging.getLogger(__name__)

@@ -47,7 +47,7 @@ import psutil
 from functools import reduce
 import yaml
 
-from autotab.utils.log_utils import logger
+from autogbm.utils.log_utils import logger
 
 if (os.name == "nt"):
     filesep = '\\'

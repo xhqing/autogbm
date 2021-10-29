@@ -1,5 +1,5 @@
 from sklearn.preprocessing import LabelEncoder
-from autotab.autotab import autotab_run
+from autogbm.autogbm import autogbm_run
 import pandas as pd
 
 df = pd.read_csv("example_data/bank-additional-full.csv", sep=";")
@@ -13,4 +13,4 @@ for col in trans_cols:
 
 label = df["y"]
 
-autotab_run(df=df, label=label, formatted_dir="./formatted_data")
+autogbm_run(df=df, label=label, formatted_dir="./formatted_data")

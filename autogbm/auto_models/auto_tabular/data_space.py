@@ -5,7 +5,7 @@ from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 import gc
 
-from autotab.utils.log_utils import log, timeit
+from autogbm.utils.log_utils import log, timeit
 from ..auto_tabular.utils.data_utils import ohe2cat
 from ..auto_tabular.utils.data_utils import fill_na
 from ..auto_tabular.utils.sample import AutoSample

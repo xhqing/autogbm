@@ -8,7 +8,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 
-from autotab.convertor.dataset_formatter import UniMediaDatasetFormatter
+from autogbm.convertor.dataset_formatter import UniMediaDatasetFormatter
 
 
 def get_features(row):

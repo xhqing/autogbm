@@ -1,7 +1,7 @@
 import numpy as np
 import random
 from .eda import AutoEDA
-from autotab.utils.log_utils import info
+from autogbm.utils.log_utils import info
 
 
 class AutoSample:

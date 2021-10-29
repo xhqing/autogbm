@@ -1,5 +1,5 @@
 
-from autotab.utils.log_utils import logger
+from autogbm.utils.log_utils import logger
  
 from .auto_tabular.model import Model as TabularModel
 

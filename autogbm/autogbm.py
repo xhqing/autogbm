@@ -5,13 +5,13 @@ import os
 
 import pandas as pd
 
-from autotab.auto_ingestion import data_io
-from autotab.auto_ingestion.dataset import AutoDLDataset
-from autotab.convertor.tabular_to_tfrecords import autotabular_2_autodl_format
-from autotab.auto_models.auto_tabular.model import Model as TabularModel
-from autotab.auto_ingestion.pure_model_run import run_single_model
+from autogbm.auto_ingestion import data_io
+from autogbm.auto_ingestion.dataset import AutoDLDataset
+from autogbm.convertor.tabular_to_tfrecords import autotabular_2_autodl_format
+from autogbm.auto_models.auto_tabular.model import Model as TabularModel
+from autogbm.auto_ingestion.pure_model_run import run_single_model
 
-def autotab_run(df: pd.DataFrame, label: pd.Series, formatted_dir: str="./formatted_data"):
+def autogbm_run(df: pd.DataFrame, label: pd.Series, formatted_dir: str="./formatted_data"):
 
     autotabular_2_autodl_format(formatted_dir=formatted_dir, data=df, label=label)
 

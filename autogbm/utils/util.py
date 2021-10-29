@@ -6,8 +6,8 @@ import os
 import psutil
 import numpy as np
 
-from autotab.utils.log_utils import logger
-from autotab.auto_scoring.libscores import ls, read_array
+from autogbm.utils.log_utils import logger
+from autogbm.auto_scoring.libscores import ls, read_array
 
 
 def is_process_alive(pid):

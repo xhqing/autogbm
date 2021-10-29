@@ -6,7 +6,7 @@
 
 """
 
-from autotab.utils.log_utils import info, timeit
+from autogbm.utils.log_utils import info, timeit
 
 
 class AutoEDA(object):
