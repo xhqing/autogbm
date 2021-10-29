@@ -1,14 +1,14 @@
 import setuptools
 
 setuptools.setup(
-    name="autotab",
+    name="autogbm",
     version="0.0.1",
     author="xuhuaqing",
-    author_email="huaqing.xu@qq.com",
-    description="automation machine learning, tabular data.",
-    long_description="automation machine learning framework, only deal with tabular data and only using cpu so far.",
+    author_email="huaqingxu89@gmail.com",
+    description="automation gradient boosting maching.",
+    long_description="automation machine learning framework, automation gradient boosting maching.",
     long_description_content_type="text",
-    url="https://github.com/xhqing/AutoTabular-cpu",
+    url="https://github.com/xhqing/autogbm",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
