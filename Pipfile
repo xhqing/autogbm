@@ -5,6 +5,9 @@ name = "pypi"
 
 [packages]
 sklearn = "*"
+psutil = "*"
+pandas = "*"
+lightgbm = "*"
 
 [dev-packages]
 
