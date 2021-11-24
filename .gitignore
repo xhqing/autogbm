@@ -130,3 +130,9 @@ dmypy.json
 
 # catboost info
 catboost_info
+
+# tmp
+tmp
+
+# obsidian
+.obsidian
