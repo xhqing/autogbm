@@ -15,7 +15,6 @@ psutil = "*"
 numba = "==0.46.0"
 
 [dev-packages]
-tensorflow = "==1.13.1"
 
 [requires]
 python_version = "3.6"

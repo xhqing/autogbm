@@ -1,6 +1,6 @@
 from sklearn.preprocessing import LabelEncoder
-from autogbm.autogbm import autogbm_run
 import pandas as pd
+import autogbm as ag
 
 df = pd.read_csv("example_data/bank-additional-full.csv", sep=";")
 
@@ -11,6 +11,4 @@ for col in trans_cols:
     lbe = LabelEncoder()
     df[col] = lbe.fit_transform(df[col])
 
-label = df["y"]
-
-autogbm_run(df=df, label=label, formatted_dir="./formatted_data")
+ag.auto_train(train_set=df, label_name="y")

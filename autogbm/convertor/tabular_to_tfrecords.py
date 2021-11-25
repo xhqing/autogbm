@@ -8,7 +8,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 
-from autogbm.convertor.dataset_formatter import UniMediaDatasetFormatter
+# from autogbm.convertor.dataset_formatter import UniMediaDatasetFormatter
 
 
 def get_features(row):
@@ -43,6 +43,7 @@ def autotabular_2_autodl_format(formatted_dir: str, data: pd.DataFrame, label: p
         label: input data label
     Returns:
     """
+
     formatted_dir = os.path.abspath(formatted_dir)
     dir_name = os.path.basename(formatted_dir)
     output_dir = formatted_dir
