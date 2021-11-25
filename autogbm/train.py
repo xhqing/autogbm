@@ -13,6 +13,8 @@ class UnkownError(Exception):
     """UnkownError class"""
 class NotsupportError(Exception):
     """NotsupportError class"""
+class LabelError(Exception):
+    """LabelError class"""
 
 def auto_train(train_set: pd.DataFrame, 
                 label_name: str, task: str="binary", metric: str="auc", 
@@ -127,6 +129,13 @@ def auto_train(train_set: pd.DataFrame,
         raise TypeError("""\033[01;31;01m`gpu` value must be bool type!\033[01;31;01m""")
     if gpu:
         raise NotsupportError("""\033[01;31;01mSorry, not support gpu yet!\033[01;31;01m""")
+
+    if task == "binary":
+        label_nunique = train_set[label_name].nunique()
+        if label_nunique > 2:
+            raise LabelError(f"""\033[01;31;01mIt's binary task, but label have {label_nunique} diffirent kinds of values!\033[01;31;01m""")
+        if label_nunique < 2:
+            raise LabelError(f"""\033[01;31;01mIt's binary task, but label have only {label_nunique} kind of value!\033[01;31;01m""")
 
     
 
