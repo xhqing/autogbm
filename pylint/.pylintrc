@@ -1,6 +1,0 @@
-[RMAT]
-max-line-length=2400
-max-statements=1000
-[MESSAGES CONTROL]
-disable=E1101
-

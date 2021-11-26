@@ -15,6 +15,7 @@ psutil = "*"
 numba = "==0.46.0"
 
 [dev-packages]
+pylint = "*"
 
 [requires]
 python_version = "3.6"
