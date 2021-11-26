@@ -127,11 +127,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# catboost info
+# ===========
 catboost_info
-
-# tmp
 tmp
-
-# obsidian
 .obsidian
+.vscode

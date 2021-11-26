@@ -5,14 +5,7 @@ name = "pypi"
 
 [packages]
 scikit-learn = "==0.20.3"
-catboost = "==1.0.3"
-hyperopt = "==0.2.5"
-librosa = "==0.7.1"
-lightgbm = "==2.2.3"
 pandas = "==0.24.2"
-xgboost = "==0.90"
-psutil = "*"
-numba = "==0.46.0"
 
 [dev-packages]
 pylint = "*"
