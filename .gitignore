@@ -132,3 +132,4 @@ catboost_info
 tmp
 .obsidian
 .vscode
+.autogbm_models
