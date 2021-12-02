@@ -1,6 +1,6 @@
 # autogbm
 ## Development Environment
-Using MacOS and pipenv virtual environment(Python3.6), see more about [pipenv website](https://pipenv.pypa.io/en/latest/)
+Using MacOS and pipenv virtual environment (Python3.6), see more about [pipenv website](https://pipenv.pypa.io/en/latest/)
  
 
 ## Test Environment and Test Example
