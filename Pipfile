@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 scikit-learn = "==0.20.3"
 pandas = "==0.24.2"
+tensorflow = "==1.13.1"
 
 [dev-packages]
 pylint = "*"
