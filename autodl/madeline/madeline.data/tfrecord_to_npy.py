@@ -1,3 +1,4 @@
+import os
 import tensorflow as tf
 from tqdm import  tqdm
 import numpy as np
@@ -32,7 +33,13 @@ if __name__ == "__main__":
     D_train = AutoDLDataset("./train")
     x_train, y_train = to_numpy(D_train.get_metadata().metadata_, D_train.get_dataset())
     print(x_train.shape, y_train.shape)
+    os.makedirs("./train_npy")
+    np.save("./train_npy/x_train.npy", x_train)
+    np.save("./train_npy/y_train.npy", y_train)
 
     D_test = AutoDLDataset("./test")
     x_test, y_test = to_numpy(D_test.get_metadata().metadata_, D_test.get_dataset())
     print(x_test.shape, y_test.shape)
+    os.makedirs("./test_npy")
+    np.save("./test_npy/x_test.npy", x_test)
+    np.save("./test_npy/y_test.npy", y_test)
