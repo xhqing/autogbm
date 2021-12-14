@@ -13,13 +13,13 @@ def nauc(y_test: np.ndarray, prediction: np.ndarray):
         auc[k] = (sum(r_[s_ == 1]) - npos * (npos + 1) / 2) / (nneg * npos)
     return 2 * mvmean(auc) - 1
 
-def acc(solution, prediction):
+def acc(y_test: np.ndarray, prediction: np.ndarray):
     """Get accuracy"""
     epsilon = 1e-15
     # normalize prediction
     prediction_normalized = \
         prediction / (np.sum(np.abs(prediction), axis=1, keepdims=True) + epsilon)
-    return np.sum(solution * prediction_normalized) / solution.shape[0]
+    return np.sum(y_test * prediction_normalized) / y_test.shape[0]
 
 def mvmean(R, axis=0):
     ''' Moving average to avoid rounding errors. A bit slow, but...

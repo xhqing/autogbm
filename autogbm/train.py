@@ -26,8 +26,6 @@ class GBMModel:
     def __init__(self):
         self.X_train = None
         self.Y_train = None
-        self.X_test = None
-        self.Y_test = None
         self.label_name = None
         self.train_loop_num = 1
         self.is_multi_label = None
@@ -52,9 +50,7 @@ class GBMModel:
                 self.label_name = label_name
 
     def predict(self, x_test, remaining_time_budget=None):
-        if not self.X_test:
-            self.X_test = x_test
-        preds = self.simple_lgb(self.X_train, self.Y_train, self.X_test)
+        preds = self.simple_lgb(self.X_train, self.Y_train, x_test)
 
         return preds
 
@@ -304,10 +300,8 @@ def auto_train(train_set: pd.DataFrame, test_set: pd.DataFrame, label_name: str,
             y_pred = model.predict(x_test=deepcopy(test_set.drop(label_name, axis=1)), remaining_time_budget=remaining_time_budget)
 
             ohe_y_test = OneHotEncoder(categories='auto').fit_transform([[ele] for ele in test_set[label_name]]).toarray()
-            import pdb
-            pdb.set_trace()
             nauc_score = nauc(y_test=ohe_y_test, prediction=y_pred)
-            acc_score = accuracy(solution=solution, prediction=y_pred)
+            acc_score = acc(y_test=ohe_y_test, prediction=y_pred)
             print("Epoch={}, evaluation: nauc_score={}, acc_score={}".format(i, nauc_score, acc_score))
 
 
