@@ -27,11 +27,15 @@ class GBMModel:
         self.X_train = None
         self.Y_train = None
         self.label_name = None
-        self.train_loop_num = 1
+        self.train_loop_num = 0
         self.is_multi_label = None
+        self.imp_cols = None
+        self.unknow_cols = None
+        self.lgb_info = dict()
 
     def fit(self, trainset, label_name, remaining_time_budget=None):
-        
+        self.train_loop_num += 1
+
         if self.train_loop_num == 1:
             sample_num = 500
         elif self.train_loop_num == 2:
@@ -80,6 +84,7 @@ class GBMModel:
             'reg_lambda': 0.1,
             "learning_rate": 0.1
         }
+        num_boost_round = 10
 
         print('simple lgb predict train_loop_num:', self.train_loop_num)
         if self.train_loop_num == 1:
@@ -102,30 +107,50 @@ class GBMModel:
                 # preds = np.stack(all_preds, axis=1)
             else:
                 lgb_train = lgb.Dataset(X, y.values)
-                self.model = lgb.train({**self.params, **self.hyperparams}, train_set=lgb_train, num_boost_round=10)
+                self.model = lgb.train({**self.params, **self.hyperparams}, train_set=lgb_train, num_boost_round=num_boost_round)
                 preds = self.model.predict(test_x)
-            # self.log_feat_importances()
+            self.log_feat_importances()
         else:
-            pass
-            # self.hyperparams['num_boost_round'] += self.train_loop_num * 5
-            # self.hyperparams['num_boost_round'] = min(40, self.hyperparams['num_boost_round'])
-            # print(self.hyperparams['num_boost_round'])
+            num_boost_round += self.train_loop_num * 5
+            num_boost_round = min(40, num_boost_round)
 
-            # if self.is_multi_label:
-            #     models = {}
-            #     all_preds = []
-            #     for cls in range(y.shape[1]):
-            #         cls_y = y[:, cls]
-            #         data = lgb.Dataset(X[self.imp_cols], cls_y)
-            #         models[cls] = lgb.train({**self.params, **self.hyperparams}, data)
-            #         preds = models[cls].predict(test_x[self.imp_cols])
-            #         all_preds.append(preds[:, 1])
-            #     preds = np.stack(all_preds, axis=1)
-            # else:
-            #     lgb_train = lgb.Dataset(X[self.imp_cols], ohe2cat(y))
-            #     model = lgb.train({**self.params, **self.hyperparams}, train_set=lgb_train)
-            #     preds = model.predict(test_x[self.imp_cols])
+            if self.is_multi_label:
+                pass
+                # models = {}
+                # all_preds = []
+                # for cls in range(y.shape[1]):
+                #     cls_y = y[:, cls]
+                #     data = lgb.Dataset(X[self.imp_cols], cls_y)
+                #     models[cls] = lgb.train({**self.params, **self.hyperparams}, data)
+                #     preds = models[cls].predict(test_x[self.imp_cols])
+                #     all_preds.append(preds[:, 1])
+                # preds = np.stack(all_preds, axis=1)
+            else:
+                lgb_train = lgb.Dataset(X[self.imp_cols], y)
+                model = lgb.train({**self.params, **self.hyperparams}, train_set=lgb_train, num_boost_round=num_boost_round)
+                preds = model.predict(test_x[self.imp_cols])
         return preds
+
+    def log_feat_importances(self):
+        if not self.is_multi_label:
+            importances = pd.DataFrame({'features': [i for i in self.model.feature_name()],
+                                                                    'importances': self.model.feature_importance("gain")})
+        else:
+            importances = pd.DataFrame({'features': [i for i in self.models[0].feature_name()],
+                                                                    'importances': self.models[0].feature_importance("gain")})
+
+        importances.sort_values('importances', ascending=False, inplace=True)
+
+        importances = importances[importances['importances'] > 0]
+        size = int(len(importances)*0.8)
+        if self.imp_cols is None:
+            if self.unknow_cols is not None:
+                self.imp_cols = self.unknow_cols + importances['features'].tolist()
+            else:
+                self.imp_cols = importances['features'].tolist()
+        else:
+            self.imp_cols = importances['features'].tolist()
+        self.lgb_info['imp_cols'] = self.imp_cols
 
 
 def pandas_dtype_check(dataset: pd.DataFrame):
@@ -303,6 +328,8 @@ def auto_train(train_set: pd.DataFrame, test_set: pd.DataFrame, label_name: str,
             nauc_score = nauc(y_test=ohe_y_test, prediction=y_pred)
             acc_score = acc(y_test=ohe_y_test, prediction=y_pred)
             print("Epoch={}, evaluation: nauc_score={}, acc_score={}".format(i, nauc_score, acc_score))
+
+            if i == 1: break
 
 
 
