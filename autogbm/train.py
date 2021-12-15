@@ -23,7 +23,7 @@ class LabelError(Exception):
 
 class GBMModel:
     """GBMModel class"""
-    def __init__(self):
+    def __init__(self, max_epoch):
         self.X_train = None
         self.Y_train = None
         self.label_name = None
@@ -32,6 +32,10 @@ class GBMModel:
         self.imp_cols = None
         self.unknow_cols = None
         self.lgb_info = dict()
+        self.pre_increament_preds = True
+        self.first_preds = False
+        self.done_training = False
+        self.max_epoch = max_epoch
 
     def fit(self, trainset, label_name, remaining_time_budget=None):
         self.train_loop_num += 1
@@ -47,14 +51,42 @@ class GBMModel:
         else:
             sample_num = 500*2**(self.train_loop_num-3)
 
-        if sample_num < trainset.shape[0]:
+        if sample_num <= trainset.shape[0]:
             self.X_train = deepcopy(trainset.drop(label_name, axis=1).loc[:sample_num-1,:])
             self.Y_train = deepcopy(trainset.loc[:sample_num-1, label_name])
             if not self.label_name:
                 self.label_name = label_name
+        else:
+            self.pre_increament_preds = False
+            self.train_loop_num = 1
+            if self.train_loop_num == 1:
+                self.first_preds = True
 
-    def predict(self, x_test, remaining_time_budget=None):
-        preds = self.simple_lgb(self.X_train, self.Y_train, x_test)
+    def predict(self, x_test: pd.DataFrame, remaining_time_budget=None):
+        if self.pre_increament_preds or self.first_preds:
+            if self.X_test is None: self.X_test = x_test
+            preds = self.simple_lgb(self.X_train, self.Y_train, self.X_test)
+            if self.first_preds:
+                self.first_preds = False
+                self.train_loop_num = 0
+        else:
+            if self.train_loop_num == 1:
+                self.X_test.index = -self.X_test.index - 1
+                main_df = pd.concat([self.X_train, self.X_test], axis=0)
+
+                self.X_test.drop(self.X_test.columns, axis=1, inplace=True)
+                self.X_train.drop(self.X_train.columns, axis=1, inplace=True)
+                del self.X_train, self.X_test, self.X, self.Y
+                gc.collect()
+
+                eda_info = self.auto_eda.get_info(main_df)
+                eda_info['is_multi_label'] = self.is_multi_label
+                self.data_space = TabularDataSpace(self.metadata_info, eda_info, main_df, self.Y_train, self.lgb_info)
+                self.model_space = TabularModelSpace(self.metadata_info, eda_info)
+                self.explore = Explore(self.metadata_info, eda_info, self.model_space, self.data_space)
+            print('time', remaining_time_budget)
+            self.explore.explore_space(train_loop_num=self.train_loop_num, time_remain=remaining_time_budget)
+            preds = self.explore.predict()
 
         return preds
 
@@ -300,13 +332,14 @@ def auto_train(train_set: pd.DataFrame, test_set: pd.DataFrame, label_name: str,
         raise NotsupportError("""\033[01;31;01mSorry, not support gpu yet!\033[01;31;01m""")
 
     if task == "binary":
-        label_nunique = train_set[label_name].nunique()
-        if label_nunique > 2:
-            raise LabelError(f"""\033[01;31;01mIt's binary task, but label have {label_nunique} diffirent kinds of values!\033[01;31;01m""")
-        if label_nunique < 2:
-            raise LabelError(f"""\033[01;31;01mIt's binary task, but label have only {label_nunique} kind of value!\033[01;31;01m""")
-        if label_nunique != test_set[label_name].nunique():
-            raise LabelError(f"""\033[01;31;01mtrain_set label nunique not the same as test_set label nunique!\033[01;31;01m""")
+        task = "multi"
+        # label_nunique = train_set[label_name].nunique()
+        # if label_nunique > 2:
+        #     raise LabelError(f"""\033[01;31;01mIt's binary task, but label have {label_nunique} diffirent kinds of values!\033[01;31;01m""")
+        # if label_nunique < 2:
+        #     raise LabelError(f"""\033[01;31;01mIt's binary task, but label have only {label_nunique} kind of value!\033[01;31;01m""")
+        # if label_nunique != test_set[label_name].nunique():
+        #     raise LabelError(f"""\033[01;31;01mtrain_set label nunique not the same as test_set label nunique!\033[01;31;01m""")
     elif task == "regression":
         raise NotsupportError("""\033[01;31;01mSorry, not support regression task yet!\033[01;31;01m""")
     elif task == "multi":
@@ -316,7 +349,7 @@ def auto_train(train_set: pd.DataFrame, test_set: pd.DataFrame, label_name: str,
         if label_nunique != test_set[label_name].nunique():
             raise LabelError(f"""\033[01;31;01mtrain_set label nunique not the same as test_set label nunique!\033[01;31;01m""")
     
-        model = GBMModel()
+        model = GBMModel(max_epoch=max_epoch)
         start_time = int(time.time())
         for i in range(max_epoch):
             remaining_time_budget = start_time + time_budget - int(time.time())
@@ -327,9 +360,9 @@ def auto_train(train_set: pd.DataFrame, test_set: pd.DataFrame, label_name: str,
             ohe_y_test = OneHotEncoder(categories='auto').fit_transform([[ele] for ele in test_set[label_name]]).toarray()
             nauc_score = nauc(y_test=ohe_y_test, prediction=y_pred)
             acc_score = acc(y_test=ohe_y_test, prediction=y_pred)
-            print("Epoch={}, evaluation: nauc_score={}, acc_score={}".format(i, nauc_score, acc_score))
+            print("Epoch={}, evaluation: nauc_score={}, acc_score={}".format(i+1, nauc_score, acc_score))
 
-            if i == 1: break
+            # if i == 6: break
 
 
 
