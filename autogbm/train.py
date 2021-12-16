@@ -13,6 +13,8 @@ import lightgbm as lgb
 from sklearn.preprocessing import OneHotEncoder
 
 from autogbm.scores import nauc, acc
+from autogbm.eda import AutoEDA
+from autogbm.util import print_formatted_json
 
 class UnkownError(Exception):
     """UnkownError class"""
@@ -26,6 +28,7 @@ class GBMModel:
     def __init__(self, max_epoch):
         self.X_train = None
         self.Y_train = None
+        self.X_test = None
         self.label_name = None
         self.train_loop_num = 0
         self.is_multi_label = None
@@ -36,6 +39,7 @@ class GBMModel:
         self.first_preds = False
         self.done_training = False
         self.max_epoch = max_epoch
+        self.auto_eda = AutoEDA()
 
     def fit(self, trainset, label_name, remaining_time_budget=None):
         self.train_loop_num += 1
@@ -58,9 +62,9 @@ class GBMModel:
                 self.label_name = label_name
         else:
             self.pre_increament_preds = False
-            self.train_loop_num = 1
             if self.train_loop_num == 1:
                 self.first_preds = True
+            self.train_loop_num = 1
 
     def predict(self, x_test: pd.DataFrame, remaining_time_budget=None):
         if self.pre_increament_preds or self.first_preds:
@@ -73,14 +77,13 @@ class GBMModel:
             if self.train_loop_num == 1:
                 self.X_test.index = -self.X_test.index - 1
                 main_df = pd.concat([self.X_train, self.X_test], axis=0)
-
-                self.X_test.drop(self.X_test.columns, axis=1, inplace=True)
-                self.X_train.drop(self.X_train.columns, axis=1, inplace=True)
-                del self.X_train, self.X_test, self.X, self.Y
-                gc.collect()
+                del self.X_train, self.X_test
 
                 eda_info = self.auto_eda.get_info(main_df)
                 eda_info['is_multi_label'] = self.is_multi_label
+                print_formatted_json(eda_info)
+                import pdb
+                pdb.set_trace()
                 self.data_space = TabularDataSpace(self.metadata_info, eda_info, main_df, self.Y_train, self.lgb_info)
                 self.model_space = TabularModelSpace(self.metadata_info, eda_info)
                 self.explore = Explore(self.metadata_info, eda_info, self.model_space, self.data_space)
@@ -362,7 +365,7 @@ def auto_train(train_set: pd.DataFrame, test_set: pd.DataFrame, label_name: str,
             acc_score = acc(y_test=ohe_y_test, prediction=y_pred)
             print("Epoch={}, evaluation: nauc_score={}, acc_score={}".format(i+1, nauc_score, acc_score))
 
-            # if i == 6: break
+            # if i+1 == 8: break
 
 
 
