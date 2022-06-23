@@ -8,4 +8,4 @@ Anna Veronika Dorogush, Vasily Ershov, Andrey Gulin ["CatBoost: gradient boostin
 Tianqi Chen and Carlos Guestrin. [XGBoost: A Scalable Tree Boosting System](http://arxiv.org/abs/1603.02754). In 22nd SIGKDD Conference on Knowledge Discovery and Data Mining, 2016
 
 ## License
-This project is licensed under the terms of the MIT license. See [LICENSE](https://github.com/xhqing/autogbm/blob/master/LICENSE) for additional details.
+Apache License 2.0
