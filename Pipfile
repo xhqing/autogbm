@@ -3,11 +3,6 @@ name = "pypi"
 verify_ssl = true
 url = "https://pypi.douban.com/simple/"
 
-[[source]]
-url = "https://pypi.org/simple"
-verify_ssl = true
-name = "pypi"
-
 [packages]
 pandas = "*"
 scikit-learn = "*"

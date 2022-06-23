@@ -1,6 +1,6 @@
 from sklearn.preprocessing import LabelEncoder
 import pandas as pd
-import autogbm as ag
+import autogbm as agb
 from sklearn.model_selection import train_test_split
 
 df = pd.read_csv("example_data/bank-additional-full.csv", sep=";")
@@ -18,5 +18,5 @@ trainset = pd.concat([train_data, train_label], axis=1)
 testset = pd.concat([test_data, test_label], axis=1)
 del train_data, train_label, test_data, test_label
 
-ag.auto_train(train_set=trainset, label_name="y", test_set=testset)
+agb.auto_train(train_set=trainset, label_name="y", test_set=testset)
 
