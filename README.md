@@ -4,6 +4,10 @@
 ```bash
 pipenv run python exam.py
 ```
+```sh
+pipenv install --skip-lock --dev ipykernel
+pipenv run python -m ipykernel install --name autogbm-bPW5dF2p
+```
 
 ## Description
 Automated machine learning framework in tabular domain, a highly efficient automated gradient boosting machine.
