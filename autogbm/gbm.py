@@ -23,6 +23,9 @@ class GBMModel:
         self.auto_eda = AutoEDA()
 
     def fit(self, trainset, label_name, remaining_time_budget=None):
+        import pdb
+        pdb.set_trace()
+        
         self.train_loop_num += 1
 
         if self.train_loop_num == 1:

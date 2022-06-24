@@ -13,10 +13,9 @@ for col in trans_cols:
     df[col] = lbe.fit_transform(df[col])
 
 train_data, test_data, train_label, test_label = train_test_split(df.drop("y", axis=1), df["y"], test_size=0.3, random_state=1024)
-del df
+
 trainset = pd.concat([train_data, train_label], axis=1)
 testset = pd.concat([test_data, test_label], axis=1)
-del train_data, train_label, test_data, test_label
 
 agb.auto_train(train_set=trainset, label_name="y", test_set=testset)
 
