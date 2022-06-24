@@ -1,5 +1,10 @@
 # autogbm
 
+## Example
+```bash
+pipenv run python exam.py
+```
+
 ## Description
 Automated machine learning framework in tabular domain, a highly efficient automated gradient boosting machine.
 
