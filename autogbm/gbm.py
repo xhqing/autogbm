@@ -63,8 +63,6 @@ class GBMModel:
                 eda_info = self.auto_eda.get_info(main_df)
                 eda_info['is_multi_label'] = self.is_multi_label
                 print_formatted_json(eda_info)
-                import pdb
-                pdb.set_trace()
                 self.data_space = TabularDataSpace(self.metadata_info, eda_info, main_df, self.Y_train, self.lgb_info)
                 self.model_space = TabularModelSpace(self.metadata_info, eda_info)
                 self.explore = Explore(self.metadata_info, eda_info, self.model_space, self.data_space)
